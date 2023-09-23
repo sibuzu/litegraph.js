@@ -6529,7 +6529,7 @@ LGraphNode.prototype.executeAction = function(action)
                     ) {
                         this.canvas.style.cursor = "se-resize";
                     } else {
-                        this.canvas.style.cursor = "crosshair";
+                        this.canvas.style.cursor = "arrow";
                     }
                 }
             } else { //not over a node
