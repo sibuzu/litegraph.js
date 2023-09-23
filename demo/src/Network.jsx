@@ -41,7 +41,7 @@ export default class NetworkMain extends Component {
 		const COLOR_VIEWER = "#FFFF00";
 		const COLOR_WRITER = "#40E0D0";
 
-		LiteGraph.quickRegisterNodeType("Computer/Channel/DataMerge", "Data", 2, 1, COLOR_COMPUTER)
+		LiteGraph.quickRegisterNodeType("Computer/Channel/DataMerge", "Merge", 2, 1, COLOR_COMPUTER)
 		LiteGraph.quickRegisterNodeType("Computer/Channel/Data Selection", "Selection", 1, 1, COLOR_COMPUTER)
 		LiteGraph.quickRegisterNodeType("Computer/Channel/Dup", "Dup", 1, 1, COLOR_COMPUTER)
 		LiteGraph.quickRegisterNodeType("Computer/Channel/Fill Null Value", "FullNull", 1, 1, COLOR_COMPUTER)
@@ -55,7 +55,7 @@ export default class NetworkMain extends Component {
 
 		LiteGraph.quickRegisterNodeType("Viewer/Channel Viewer", "Viewer", 1, 0, COLOR_VIEWER)
 
-		LiteGraph.quickRegisterNodeType("Writer/Data Writer", "DataWriter", 1, 0, COLOR_VIEWER)
+		LiteGraph.quickRegisterNodeType("Writer/Data Writer", "DataWriter", 1, 0, COLOR_WRITER)
 
 		var nodes = ["Computer/Channel/DataMerge", "Conversion/Convert From DateTime",
 			"External/Demo01", "Source/Sine Wave", "Viewer/Channel Viewer", "Writer/Data Writer"]
