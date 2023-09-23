@@ -12,3 +12,4 @@ build/litegraph.min.js
 !/.vscode/extensions.json
 *.bak
 .project
+/demo/src/litegraph.js

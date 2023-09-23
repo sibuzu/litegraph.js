@@ -18,7 +18,8 @@
 
         NODE_TITLE_HEIGHT: 30,
         NODE_TITLE_TEXT_Y: 20,
-        NODE_SLOT_HEIGHT: 20,
+        NODE_SLOT_HEIGHT: 15,
+        NODE_SLOT_SIZE: 4,
         NODE_WIDGET_HEIGHT: 20,
         NODE_WIDTH: 140,
         NODE_MIN_WIDTH: 50,
@@ -33,7 +34,7 @@
         NODE_DEFAULT_BGCOLOR: "#353535",
         NODE_DEFAULT_BOXCOLOR: "#666",
         NODE_DEFAULT_SHAPE: "box",
-        NODE_BOX_OUTLINE_COLOR: "#FFF",
+        NODE_BOX_OUTLINE_COLOR: "#33F",
         DEFAULT_SHADOW_COLOR: "rgba(0,0,0,0.5)",
         DEFAULT_GROUP_FONT: 24,
 
@@ -41,6 +42,8 @@
         WIDGET_OUTLINE_COLOR: "#666",
         WIDGET_TEXT_COLOR: "#DDD",
         WIDGET_SECONDARY_TEXT_COLOR: "#999",
+
+        ACCUMULATE_COLOR: "#F5C2CB",
 
         LINK_COLOR: "#9A9",
         EVENT_LINK_COLOR: "#A86",
@@ -204,6 +207,7 @@
                                 break;
                             default:
                                 this._shape = v;
+                                break;
                         }
                     },
                     get: function() {
@@ -3653,6 +3657,7 @@
         }
 
         size[1] += 6; //margin
+        size[1] = Math.max(size[1], 31);
 
         return size;
     };
@@ -4706,10 +4711,12 @@
         } else {
             out[0] = this.pos[0] + this.size[0] + 1 - offset;
         }
+
+        var slot_start_y = (this.size[1] - num_slots * LiteGraph.NODE_SLOT_HEIGHT) * 0.5 - 3;
         out[1] =
             this.pos[1] +
             (slot_number + 0.7) * LiteGraph.NODE_SLOT_HEIGHT +
-            (this.constructor.slot_start_y || 0);
+            slot_start_y;
         return out;
     };
 
@@ -5220,7 +5227,7 @@ LGraphNode.prototype.executeAction = function(action)
             input_off: "#778",
             input_on: "#7F7", //"#BBD"
             output_off: "#778",
-            output_on: "#7F7" //"#BBD"
+            output_on: "#77F" //"#BBD"
 		};
         this.default_connection_color_byType = {
             /*number: "#7F7",
@@ -5269,6 +5276,9 @@ LGraphNode.prototype.executeAction = function(action)
         this.render_execution_order = false;
         this.render_title_colored = true;
 		this.render_link_tooltip = true;
+        this.render_link_color = 'black';
+        this.render_node_title = true;
+        this.render_node_text = false;
 
         this.links_render_mode = LiteGraph.SPLINE_LINK;
 
@@ -5325,8 +5335,8 @@ LGraphNode.prototype.executeAction = function(action)
 
     LGraphCanvas.link_type_colors = {
         "-1": LiteGraph.EVENT_LINK_COLOR,
-        number: "#AAA",
-        node: "#DCA"
+        number: "black",
+        node: "black"
     };
     LGraphCanvas.gradients = {}; //cache of gradients
 
@@ -6879,19 +6889,11 @@ LGraphNode.prototype.executeAction = function(action)
 		if(!is_inside)
 			return;
 
-        var scale = this.ds.scale;
-
-        if (delta > 0) {
-            scale *= 1.1;
-        } else if (delta < 0) {
-            scale *= 1 / 1.1;
-        }
-
-        //this.setZoom( scale, [ e.clientX, e.clientY ] );
-        this.ds.changeScale(scale, [e.clientX, e.clientY]);
-
-        this.graph.change();
-
+        // scroll up/down
+        this.ds.offset[1] += delta;
+        this.dirty_canvas = true;
+        this.dirty_bgcanvas = true;
+           
         e.preventDefault();
         return false; // prevent default
     };
@@ -7847,10 +7849,10 @@ LGraphNode.prototype.executeAction = function(action)
                     [this.graph_mouse[0], this.graph_mouse[1]],
                     null,
                     false,
-                    null,
+                    false,
                     link_color,
                     connDir,
-                    LiteGraph.CENTER
+                    LiteGraph.LEFT
                 );
 
                 ctx.beginPath();
@@ -8303,7 +8305,6 @@ LGraphNode.prototype.executeAction = function(action)
 
             if (
                 this.background_image &&
-                this.ds.scale > 0.5 &&
                 !bg_already_painted
             ) {
                 if (this.zoom_modify_alpha) {
@@ -8414,7 +8415,7 @@ LGraphNode.prototype.executeAction = function(action)
         this.current_node = node;
 
         var color = node.color || node.constructor.color || LiteGraph.NODE_DEFAULT_COLOR;
-        var bgcolor = node.bgcolor || node.constructor.bgcolor || LiteGraph.NODE_DEFAULT_BGCOLOR;
+        var bgcolor = node.color || node.constructor.bgcolor || LiteGraph.NODE_DEFAULT_BGCOLOR;
 
         //shadow and glow
         if (node.mouseOver) {
@@ -8519,7 +8520,7 @@ LGraphNode.prototype.executeAction = function(action)
         ctx.textAlign = horizontal ? "center" : "left";
         ctx.font = this.inner_text_font;
 
-        var render_text = !low_quality;
+        var render_text = this.render_node_text;
 
         var out_slot = this.connecting_output;
         var in_slot = this.connecting_input;
@@ -8531,6 +8532,7 @@ LGraphNode.prototype.executeAction = function(action)
         //render inputs and outputs
         if (!node.flags.collapsed) {
             //input connection slots
+            ctx.strokeStyle = "black";
             if (node.inputs) {
                 for (var i = 0; i < node.inputs.length; i++) {
                     var slot = node.inputs[i];
@@ -8605,12 +8607,11 @@ LGraphNode.prototype.executeAction = function(action)
                         ctx.rect(pos[0] + 2, pos[1] + 2, 2, 2);
                         doStroke = false;
                     } else {
-						if(low_quality)
-	                        ctx.rect(pos[0] - 4, pos[1] - 4, 8, 8 ); //faster
-						else
-	                        ctx.arc(pos[0], pos[1], 4, 0, Math.PI * 2);
+						var sz = LiteGraph.NODE_SLOT_SIZE;
+	                    ctx.arc(pos[0], pos[1], sz, 0, Math.PI * 2);
                     }
                     ctx.fill();
+                    ctx.stroke();
 
                     //render name
                     if (render_text) {
@@ -8704,10 +8705,8 @@ LGraphNode.prototype.executeAction = function(action)
                         ctx.rect(pos[0] + 2, pos[1] + 2, 2, 2);
                         doStroke = false;
                     } else {
-						if(low_quality)
-	                        ctx.rect(pos[0] - 4, pos[1] - 4, 8, 8 );
-						else
-	                        ctx.arc(pos[0], pos[1], 4, 0, Math.PI * 2);
+                        var sz = LiteGraph.NODE_SLOT_SIZE;
+                        ctx.arc(pos[0], pos[1], sz, 0, Math.PI * 2);
                     }
 
                     //trigger
@@ -8716,8 +8715,7 @@ LGraphNode.prototype.executeAction = function(action)
 
                     //if(slot.links != null && slot.links.length)
                     ctx.fill();
-					if(!low_quality && doStroke)
-	                    ctx.stroke();
+					ctx.stroke();
 
                     //render output name
                     if (render_text) {
@@ -8922,7 +8920,7 @@ LGraphNode.prototype.executeAction = function(action)
 
         var title_mode = node.constructor.title_mode;
 
-        var render_title = true;
+        var render_title = this.render_node_title;
         if (title_mode == LiteGraph.TRANSPARENT_TITLE || title_mode == LiteGraph.NO_TITLE) {
             render_title = false;
         } else if (title_mode == LiteGraph.AUTOHIDE_TITLE && mouse_over) {
@@ -9322,30 +9320,11 @@ LGraphNode.prototype.executeAction = function(action)
                     end_node_slotpos,
                     link,
                     false,
-                    0,
+                    true,
                     null,
                     start_dir,
                     end_dir
                 );
-
-                //event triggered rendered on top
-                if (link && link._last_time && now - link._last_time < 1000) {
-                    var f = 2.0 - (now - link._last_time) * 0.002;
-                    var tmp = ctx.globalAlpha;
-                    ctx.globalAlpha = tmp * f;
-                    this.renderLink(
-                        ctx,
-                        start_node_slotpos,
-                        end_node_slotpos,
-                        link,
-                        true,
-                        f,
-                        "white",
-                        start_dir,
-                        end_dir
-                    );
-                    ctx.globalAlpha = tmp;
-                }
             }
         }
         ctx.globalAlpha = 1;
@@ -9370,7 +9349,7 @@ LGraphNode.prototype.executeAction = function(action)
         b,
         link,
         skip_border,
-        flow,
+        draw_arrow,
         color,
         start_dir,
         end_dir,
@@ -9388,7 +9367,7 @@ LGraphNode.prototype.executeAction = function(action)
             color = this.default_link_color;
         }
         if (link != null && this.highlighted_links[link.id]) {
-            color = "#FFF";
+            color = this.default_link_color;
         }
 
         start_dir = start_dir || LiteGraph.RIGHT;
@@ -9410,6 +9389,7 @@ LGraphNode.prototype.executeAction = function(action)
         for (var i = 0; i < num_sublines; i += 1) {
             var offsety = (i - (num_sublines - 1) * 0.5) * 5;
 
+            var s = 0.8
             if (this.links_render_mode == LiteGraph.SPLINE_LINK) {
                 ctx.moveTo(a[0], a[1] + offsety);
                 var start_offset_x = 0;
@@ -9418,30 +9398,30 @@ LGraphNode.prototype.executeAction = function(action)
                 var end_offset_y = 0;
                 switch (start_dir) {
                     case LiteGraph.LEFT:
-                        start_offset_x = dist * -0.25;
+                        start_offset_x = dist * -s;
                         break;
                     case LiteGraph.RIGHT:
-                        start_offset_x = dist * 0.25;
+                        start_offset_x = dist * s;
                         break;
                     case LiteGraph.UP:
-                        start_offset_y = dist * -0.25;
+                        start_offset_y = dist * -s;
                         break;
                     case LiteGraph.DOWN:
-                        start_offset_y = dist * 0.25;
+                        start_offset_y = dist * s;
                         break;
                 }
                 switch (end_dir) {
                     case LiteGraph.LEFT:
-                        end_offset_x = dist * -0.25;
+                        end_offset_x = dist * -s;
                         break;
                     case LiteGraph.RIGHT:
-                        end_offset_x = dist * 0.25;
+                        end_offset_x = dist * s;
                         break;
                     case LiteGraph.UP:
-                        end_offset_y = dist * -0.25;
+                        end_offset_y = dist * -s;
                         break;
                     case LiteGraph.DOWN:
-                        end_offset_y = dist * 0.25;
+                        end_offset_y = dist * s;
                         break;
                 }
                 ctx.bezierCurveTo(
@@ -9543,97 +9523,16 @@ LGraphNode.prototype.executeAction = function(action)
             link._pos[1] = pos[1];
         }
 
-        //render arrow in the middle
-        if (
-            this.ds.scale >= 0.6 &&
-            this.highquality_render &&
-            end_dir != LiteGraph.CENTER
-        ) {
-            //render arrow
-            if (this.render_connection_arrows) {
-                //compute two points in the connection
-                var posA = this.computeConnectionPoint(
-                    a,
-                    b,
-                    0.25,
-                    start_dir,
-                    end_dir
-                );
-                var posB = this.computeConnectionPoint(
-                    a,
-                    b,
-                    0.26,
-                    start_dir,
-                    end_dir
-                );
-                var posC = this.computeConnectionPoint(
-                    a,
-                    b,
-                    0.75,
-                    start_dir,
-                    end_dir
-                );
-                var posD = this.computeConnectionPoint(
-                    a,
-                    b,
-                    0.76,
-                    start_dir,
-                    end_dir
-                );
-
-                //compute the angle between them so the arrow points in the right direction
-                var angleA = 0;
-                var angleB = 0;
-                if (this.render_curved_connections) {
-                    angleA = -Math.atan2(posB[0] - posA[0], posB[1] - posA[1]);
-                    angleB = -Math.atan2(posD[0] - posC[0], posD[1] - posC[1]);
-                } else {
-                    angleB = angleA = b[1] > a[1] ? 0 : Math.PI;
-                }
-
-                //render arrow
-                ctx.save();
-                ctx.translate(posA[0], posA[1]);
-                ctx.rotate(angleA);
-                ctx.beginPath();
-                ctx.moveTo(-5, -3);
-                ctx.lineTo(0, +7);
-                ctx.lineTo(+5, -3);
-                ctx.fill();
-                ctx.restore();
-                ctx.save();
-                ctx.translate(posC[0], posC[1]);
-                ctx.rotate(angleB);
-                ctx.beginPath();
-                ctx.moveTo(-5, -3);
-                ctx.lineTo(0, +7);
-                ctx.lineTo(+5, -3);
-                ctx.fill();
-                ctx.restore();
-            }
-
-            //circle
+        //render arrow in the end
+        if (draw_arrow) {
+            ctx.save();
+            ctx.translate(b[0]-15, b[1]);
             ctx.beginPath();
-            ctx.arc(pos[0], pos[1], 5, 0, Math.PI * 2);
+            ctx.moveTo(0, -5);
+            ctx.lineTo(+10, 0);
+            ctx.lineTo(0, +5);
             ctx.fill();
-        }
-
-        //render flowing points
-        if (flow) {
-            ctx.fillStyle = color;
-            for (var i = 0; i < 5; ++i) {
-                var f = (LiteGraph.getTime() * 0.001 + i * 0.2) % 1;
-                var pos = this.computeConnectionPoint(
-                    a,
-                    b,
-                    f,
-                    start_dir,
-                    end_dir
-                );
-                ctx.beginPath();
-                ctx.arc(pos[0], pos[1], 5, 0, 2 * Math.PI);
-                ctx.fill();
-            }
+            ctx.restore();
         }
     };
 
@@ -9654,32 +9553,33 @@ LGraphNode.prototype.executeAction = function(action)
         var p2 = [b[0], b[1]];
         var p3 = b;
 
+        var s = 0.8
         switch (start_dir) {
             case LiteGraph.LEFT:
-                p1[0] += dist * -0.25;
+                p1[0] += dist * -s;
                 break;
             case LiteGraph.RIGHT:
-                p1[0] += dist * 0.25;
+                p1[0] += dist * s;
                 break;
             case LiteGraph.UP:
-                p1[1] += dist * -0.25;
+                p1[1] += dist * -s;
                 break;
             case LiteGraph.DOWN:
-                p1[1] += dist * 0.25;
+                p1[1] += dist * s;
                 break;
         }
         switch (end_dir) {
             case LiteGraph.LEFT:
-                p2[0] += dist * -0.25;
+                p2[0] += dist * -s;
                 break;
             case LiteGraph.RIGHT:
-                p2[0] += dist * 0.25;
+                p2[0] += dist * s;
                 break;
             case LiteGraph.UP:
-                p2[1] += dist * -0.25;
+                p2[1] += dist * -s;
                 break;
             case LiteGraph.DOWN:
-                p2[1] += dist * 0.25;
+                p2[1] += dist * s;
                 break;
         }
 

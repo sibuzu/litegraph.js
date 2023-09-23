@@ -151,6 +151,7 @@ export const LiteGraph: {
     NODE_TITLE_HEIGHT: number;
     NODE_TITLE_TEXT_Y: number;
     NODE_SLOT_HEIGHT: number;
+    NODE_SLOT_SIZE: number;
     NODE_WIDGET_HEIGHT: number;
     NODE_WIDTH: number;
     NODE_MIN_WIDTH: number;
