@@ -51,8 +51,8 @@ export default class NetworkMain extends Component {
 		node_watch.pos = [300,200];
 		this.graph.add(node_watch);
 		
-		this.regNode("Computer/Channel/TEST", 2, 1, LiteGraph.NODE_COLOR_COMPUTER)
-		this.regNode("Computer/Channel/WORK", 1, 2, LiteGraph.NODE_COLOR_COMPUTER)
+		this.quickRegisterNode("Computer/Channel/TEST", 2, 1, LiteGraph.NODE_COLOR_COMPUTER)
+		this.quickRegisterNode("Computer/Channel/WORK", 1, 2, LiteGraph.NODE_COLOR_COMPUTER)
 
 		this.graphAddNoe();
 		var node_sum = LiteGraph.createNode("basic/sumx");
@@ -80,21 +80,25 @@ export default class NetworkMain extends Component {
 		this.graph.start()
     }
 
-	regNode = (reg_name, num_input, num_output, color) => {
+	quickRegisterNode = (reg_name, num_input, num_output, color) => {
 		const parts = reg_name.split('/');
-		const title = parts[parts.length - 1];
+		const my_title = parts[parts.length - 1];
 
-	    function my_node () {
-			this.title = title
-			this.color = color
-			for (let i = 0; i < num_input; ++i) {
-				this.addInput("in" + (i + 1), "number")
-			}
-			for (let i = 0; i < num_output; ++i) {
-				this.addOutput("out" + (i + 1), "number")
+		const my_node = class {
+			static title = my_title
+			constructor() {
+				this.title = my_title
+				this.color = color
+				this.is_active = true
+				this.progress = 100
+				for (let i = 0; i < num_input; ++i) {
+					this.addInput("in" + (i + 1), "number")
+				}
+				for (let i = 0; i < num_output; ++i) {
+					this.addOutput("out" + (i + 1), "number")
+				}
 			}
 		}
-		my_node.title = title
 		
 		LiteGraph.registerNodeType(reg_name, my_node);
 	}
