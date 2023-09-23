@@ -237,7 +237,7 @@ export const LiteGraph: {
 
     createNode<T extends LGraphNode = LGraphNode>(type: string): T;
     /** Register a node class so it can be listed when the user wants to create a new one */
-    quickRegisterNodeType(type: string, num_input: number, num_output: number, color: string): void;
+    quickRegisterNodeType(type: string, title: string, num_input: number, num_output: number, color: string): void;
     /** Register a node class so it can be listed when the user wants to create a new one */
     registerNodeType(type: string, base: { new (): LGraphNode }): void;
     /** removes a node type from the system */

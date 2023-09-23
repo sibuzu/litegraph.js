@@ -44,8 +44,6 @@
         WIDGET_TEXT_COLOR: "#DDD",
         WIDGET_SECONDARY_TEXT_COLOR: "#999",
 
-        NODE_COLOR_COMPUTER: "#F5C2CB",
-
         LINK_COLOR: "#9A9",
         EVENT_LINK_COLOR: "#A86",
         CONNECTING_LINK_COLOR: "#AFA",
@@ -154,13 +152,15 @@
          * Register a node class so it can be listed when the user wants to create a new one
          * @method quickRegisterNodeType
          * @param {String} type name of the node and path
+         * @param {String} title title of the node; it gets from type if empty 
          * @param {number} num_input slot number of input
          * @param {number} num_output slot number of output
          * @param {String} color the block color
          */
-        quickRegisterNodeType: function(type, num_input, num_output, color) {
+        quickRegisterNodeType: function(type, title, num_input, num_output, color) {
             const parts = type.split('/');
-            const my_title = parts[parts.length - 1];
+            const my_name = parts[parts.length - 1];
+            const my_title = title || my_name
     
             const MyNode = class {
                 constructor() {
@@ -176,7 +176,7 @@
                     }
                 }
             }
-            MyNode.title = my_title;
+            MyNode.title = my_name;
             
             LiteGraph.registerNodeType(type, MyNode);
         },
