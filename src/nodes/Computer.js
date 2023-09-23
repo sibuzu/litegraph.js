@@ -4,6 +4,8 @@
 
     // Computer/Channel
     function Accumulate() {
+        this.active = true
+        this.process = 100
         this.color = LiteGraph.ACCUMULATE_COLOR;
         this.addInput("input", "number");
         this.addOutput("output", "number");

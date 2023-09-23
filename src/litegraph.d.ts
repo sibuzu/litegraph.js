@@ -615,6 +615,8 @@ export declare class LGraphNode {
     inputs: INodeInputSlot[];
     outputs: INodeOutputSlot[];
     connections: any[];
+    active: boolean;
+    progress: number;
 
     //local data
     properties: Record<string, any>;

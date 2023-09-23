@@ -442,6 +442,7 @@
             } else {
                 node = new base_class(title);
             }
+            console.log("node", node)
 
             node.type = type;
 
@@ -2450,6 +2451,8 @@
         this.inputs = [];
         this.outputs = [];
         this.connections = [];
+        this.active = true;
+        this.progress = 0;
 
         //local data
         this.properties = {}; //for the values
@@ -5279,6 +5282,7 @@ LGraphNode.prototype.executeAction = function(action)
         this.render_link_color = 'black';
         this.render_node_title = true;
         this.render_node_text = false;
+        this.render_active_box = [10, 12]
 
         this.links_render_mode = LiteGraph.SPLINE_LINK;
 
@@ -8730,6 +8734,26 @@ LGraphNode.prototype.executeAction = function(action)
                         }
                     }
                 }
+            }
+
+            //active box
+            bsize = this.render_active_box;
+            ctx.strokeStyle = "gray";
+            ctx.fillStyle = "orange";
+            ctx.lineWidth = 1;
+            pos = [18, (node.size[1] - bsize[1]) / 2 - 1];
+            ctx.beginPath();
+            ctx.rect(pos[0], pos[1], bsize[0], bsize[1]);
+            ctx.stroke();
+            if (node.active) ctx.fill();
+
+            // progress
+            var w = 100 * (node.size[0] - 30) / 100
+            if (w>0) {
+                ctx.fillStyle = "blue";
+                ctx.beginPath();
+                ctx.rect(pos[0] - 1, pos[1] + bsize[1] + 3, w, 2);
+                ctx.fill();
             }
 
             ctx.textAlign = "left";
