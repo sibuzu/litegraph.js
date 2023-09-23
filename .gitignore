@@ -4,6 +4,8 @@ npm-debug.log
 temp/
 temp/*
 coverage/
+build/litegraph.js
+build/litegraph.min.js
 
 # Editors
 /.vscode/*

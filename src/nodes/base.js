@@ -529,7 +529,8 @@
     GraphInput.title = "Input";
     GraphInput.desc = "Input of the graph";
 
-	GraphInput.prototype.onConfigure = function()
+	GraphInput.prototype.onConfigure = function()
+
 	{
 		this.updateType();
 	}
@@ -1330,12 +1331,6 @@
         [""],
         "number"
     );
-
-    function length(v) {
-        if(v && v.length != null)
-			return Number(v.length);
-		return 0;
-    }
 
     LiteGraph.wrapFunctionAsNode(
         "basic/not",
