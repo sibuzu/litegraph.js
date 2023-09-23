@@ -152,6 +152,37 @@
 
         /**
          * Register a node class so it can be listed when the user wants to create a new one
+         * @method quickRegisterNodeType
+         * @param {String} type name of the node and path
+         * @param {number} num_input slot number of input
+         * @param {number} num_output slot number of output
+         * @param {String} color the block color
+         */
+        quickRegisterNodeType: function(type, num_input, num_output, color) {
+            const parts = type.split('/');
+            const my_title = parts[parts.length - 1];
+    
+            const MyNode = class {
+                constructor() {
+                    this.title = my_title
+                    this.color = color
+                    this.is_active = true
+                    this.progress = 100
+                    for (let i = 0; i < num_input; ++i) {
+                        this.addInput("in" + (i + 1), "number")
+                    }
+                    for (let i = 0; i < num_output; ++i) {
+                        this.addOutput("out" + (i + 1), "number")
+                    }
+                }
+            }
+            MyNode.title = my_title;
+            
+            LiteGraph.registerNodeType(type, MyNode);
+        },
+
+        /**
+         * Register a node class so it can be listed when the user wants to create a new one
          * @method registerNodeType
          * @param {String} type name of the node and path
          * @param {Class} base_class class containing the structure of a node
@@ -10895,11 +10926,11 @@ LGraphNode.prototype.executeAction = function(action)
 		var fromSlotType = slotX.type==LiteGraph.EVENT?"_event_":slotX.type;
 		var slotTypesDefault = isFrom ? LiteGraph.slot_types_default_out : LiteGraph.slot_types_default_in;
 		if(slotTypesDefault && slotTypesDefault[fromSlotType]){
-			if (slotX.link !== null) {
+			// if (slotX.link !== null) {
 				// is connected
-			}else{
+			// }else{
 				// is not not connected
-			}
+			// }
 			nodeNewType = false;
 			if(typeof slotTypesDefault[fromSlotType] == "object" || typeof slotTypesDefault[fromSlotType] == "array"){
 				for(var typeX in slotTypesDefault[fromSlotType]){
@@ -10972,9 +11003,9 @@ LGraphNode.prototype.executeAction = function(action)
 					}
 					
 					// if connecting in between
-					if (isFrom && isTo){
+					// if (isFrom && isTo){
 						// TODO
-					}
+					// }
 					
 					return true;
 					
@@ -11082,12 +11113,12 @@ LGraphNode.prototype.executeAction = function(action)
 					var nodeCreated = that.createDefaultNodeForSlot(Object.assign(opts,{ position: [opts.e.canvasX, opts.e.canvasY]
 																						,nodeType: v
 																					}));
-					if (nodeCreated){
+					// if (nodeCreated){
 						// new node created
 						//console.log("node "+v+" created")
-					}else{
+					// }else{
 						// failed or v is not in defaults
-					}
+					// }
 					break;
             }
         }   
@@ -13112,11 +13143,11 @@ LGraphNode.prototype.executeAction = function(action)
             });
         }
 
-		if(0) //TODO
-		options.push({
-			content: "To Subgraph",
-			callback: LGraphCanvas.onMenuNodeToSubgraph
-		});
+		//if(0) //TODO
+		//options.push({
+		//	content: "To Subgraph",
+		//	callback: LGraphCanvas.onMenuNodeToSubgraph
+		//});
 
         if (Object.keys(this.selected_nodes).length > 1) {
             options.push({

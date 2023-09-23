@@ -10,10 +10,6 @@ module.exports = function (grunt) {
       'src/nodes/math.js',
       'src/nodes/logic.js',
       'src/nodes/image.js',
-      'src/nodes/gltextures.js',
-      'src/nodes/glfx.js',
-      'src/nodes/midi.js',
-      'src/nodes/audio.js',
       'src/nodes/network.js'
     ],
     concat: {
