@@ -62,8 +62,12 @@ export default class NetworkMain extends Component {
 		node_const1.connect(0, node_sum, 0 );
 		node_const2.connect(0, node_sum, 1 );
 
-		var node_acc = LiteGraph.createNode("Computer/Channel/Accumulate");
+		var node_acc = LiteGraph.createNode("Computer/Channel/ABC");
 		node_acc.pos = [50,200];
+		this.graph.add(node_acc);
+
+		var node_acc = LiteGraph.createNode("Computer/Channel/ABC2");
+		node_acc.pos = [50,250];
 		this.graph.add(node_acc);
 		
 		var node_and = LiteGraph.createNode("logic/AND");
@@ -104,6 +108,7 @@ export default class NetworkMain extends Component {
 		LiteGraph.registerNodeType("basic/sumx", MyAddNode );
 
 		function ABC() {
+			this.title = "ABC";
 			this.is_active = true
 			this.progress = 100
 			this.color = LiteGraph.ACCUMULATE_COLOR;
@@ -116,6 +121,7 @@ export default class NetworkMain extends Component {
 		LiteGraph.registerNodeType("Computer/Channel/ABC", ABC);
 
 		function ABC2() {
+			this.title = "ABC1234567890";
 			this.is_active = true
 			this.progress = 100
 			this.color = LiteGraph.ACCUMULATE_COLOR;

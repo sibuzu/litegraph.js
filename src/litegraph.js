@@ -3593,6 +3593,8 @@
         var font_size = LiteGraph.NODE_TEXT_SIZE; //although it should be graphcanvas.inner_text_font size
 
         var title_width = compute_text_size(this.title);
+        console.log("title_size", this, this.title, title_width);
+        
         var input_width = 0;
         var output_width = 0;
 
@@ -3619,7 +3621,7 @@
         }
 
         var activebox_width = LiteGraph.ACTIVEBOX_SIZE[0];
-        size[0] = Math.max(input_width + output_width + activebox_width + 15, title_width);
+        size[0] = title_width + activebox_width + 40;
         size[0] = Math.max(size[0], LiteGraph.NODE_WIDTH);
         if (this.widgets && this.widgets.length) {
             size[0] = Math.max(size[0], LiteGraph.NODE_WIDTH * 1.5);
