@@ -62,9 +62,9 @@ export default class NetworkMain extends Component {
 		node_const1.connect(0, node_sum, 0 );
 		node_const2.connect(0, node_sum, 1 );
 
-		// var node_acc = LiteGraph.createNode("Computer/Channel/Accumulate");
-		// node_acc.pos = [50,200];
-		// this.graph.add(node_acc);
+		var node_acc = LiteGraph.createNode("Computer/Channel/Accumulate");
+		node_acc.pos = [50,200];
+		this.graph.add(node_acc);
 		
 		var node_and = LiteGraph.createNode("logic/AND");
 		node_and.pos = [50,300];
