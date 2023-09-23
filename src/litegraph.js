@@ -21,7 +21,7 @@
         NODE_SLOT_HEIGHT: 15,
         NODE_SLOT_SIZE: 4,
         NODE_WIDGET_HEIGHT: 20,
-        NODE_WIDTH: 140,
+        NODE_WIDTH: 50,
         NODE_MIN_WIDTH: 50,
         NODE_COLLAPSED_RADIUS: 10,
         NODE_COLLAPSED_WIDTH: 80,
@@ -37,6 +37,7 @@
         NODE_BOX_OUTLINE_COLOR: "#33F",
         DEFAULT_SHADOW_COLOR: "rgba(0,0,0,0.5)",
         DEFAULT_GROUP_FONT: 24,
+        ACTIVEBOX_SIZE: [10, 12],
 
         WIDGET_BGCOLOR: "#222",
         WIDGET_OUTLINE_COLOR: "#666",
@@ -3617,7 +3618,8 @@
             }
         }
 
-        size[0] = Math.max(input_width + output_width + 10, title_width);
+        var activebox_width = LiteGraph.ACTIVEBOX_SIZE[0];
+        size[0] = Math.max(input_width + output_width + activebox_width + 15, title_width);
         size[0] = Math.max(size[0], LiteGraph.NODE_WIDTH);
         if (this.widgets && this.widgets.length) {
             size[0] = Math.max(size[0], LiteGraph.NODE_WIDTH * 1.5);
@@ -5281,7 +5283,6 @@ LGraphNode.prototype.executeAction = function(action)
         this.render_link_color = 'black';
         this.render_node_title = true;
         this.render_node_text = false;
-        this.render_active_box = [10, 12]
 
         this.links_render_mode = LiteGraph.SPLINE_LINK;
 
@@ -8736,7 +8737,7 @@ LGraphNode.prototype.executeAction = function(action)
             }
 
             // is_active box
-            bsize = this.render_active_box;
+            var bsize = LiteGraph.ACTIVEBOX_SIZE;
             ctx.strokeStyle = "gray";
             ctx.fillStyle = "orange";
             ctx.lineWidth = 1;

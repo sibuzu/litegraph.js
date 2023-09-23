@@ -102,6 +102,31 @@ export default class NetworkMain extends Component {
 
 		//register in the system
 		LiteGraph.registerNodeType("basic/sumx", MyAddNode );
+
+		function ABC() {
+			this.is_active = true
+			this.progress = 100
+			this.color = LiteGraph.ACCUMULATE_COLOR;
+			this.addInput("input", "number");
+			this.addInput("input", "number");
+			this.addOutput("output", "number");
+		}
+		ABC.title = "ABC"
+		ABC.desc = "ABC"
+		LiteGraph.registerNodeType("Computer/Channel/ABC", ABC);
+
+		function ABC2() {
+			this.is_active = true
+			this.progress = 100
+			this.color = LiteGraph.ACCUMULATE_COLOR;
+			this.addInput("input", "number");
+			this.addInput("input", "number");
+			this.addOutput("output", "number");
+		}
+		ABC2.title = "ABC1234567890"
+		ABC2.desc = "ABC"
+		LiteGraph.registerNodeType("Computer/Channel/ABC2", ABC2);
+	
 	}
 
     componentDidMount() {
