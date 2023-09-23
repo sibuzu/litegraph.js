@@ -31,111 +31,45 @@ export default class NetworkMain extends Component {
         // graphcanvas.render_execution_order = false;
         // graphcanvas.render_title_colored = true;
 		
-		console.log('graphcanvas: ', graphcanvas)
-		
 		this.graph.onAfterExecute = function() {
 			graphcanvas.draw(true);
 		};
 	
-		var node_const1 = LiteGraph.createNode("basic/const");
-		node_const1.pos = [50,50];
-		this.graph.add(node_const1);
-		node_const1.setValue(4.5);
-		
-		var node_const2 = LiteGraph.createNode("basic/const");
-		node_const2.pos = [50,120];
-		this.graph.add(node_const2);
-		node_const2.setValue(2.5);
-		
-		var node_watch = LiteGraph.createNode("basic/watch");
-		node_watch.pos = [300,200];
-		this.graph.add(node_watch);
-		
-		LiteGraph.quickRegisterNodeType("Computer/Channel/TEST", 2, 1, LiteGraph.NODE_COLOR_COMPUTER)
-		LiteGraph.quickRegisterNodeType("Computer/Channel/WORKA", 1, 2, LiteGraph.NODE_COLOR_COMPUTER)
+		const COLOR_COMPUTER = "#F5C2CB";
+		const COLOR_EXTERNAL = "#E9967A";
+		const COLOR_SOURCE = "#3CB371";
+		const COLOR_VIEWER = "#FFFF00";
+		const COLOR_WRITER = "#40E0D0";
 
-		this.graphAddNoe();
-		var node_sum = LiteGraph.createNode("basic/sumx");
-		node_sum.shape = LiteGraph.ROUND_SHAPE
-		node_sum.pos = [300,50];
-		this.graph.add(node_sum);
-		node_sum.connect(0, node_watch, 0 );
+		LiteGraph.quickRegisterNodeType("Computer/Channel/DataMerge", "Data", 2, 1, COLOR_COMPUTER)
+		LiteGraph.quickRegisterNodeType("Computer/Channel/Data Selection", "Selection", 1, 1, COLOR_COMPUTER)
+		LiteGraph.quickRegisterNodeType("Computer/Channel/Dup", "Dup", 1, 1, COLOR_COMPUTER)
+		LiteGraph.quickRegisterNodeType("Computer/Channel/Fill Null Value", "FullNull", 1, 1, COLOR_COMPUTER)
+		LiteGraph.quickRegisterNodeType("Computer/Channel/Input Switch", "ISwitch", 2, 1, COLOR_COMPUTER)
+			
+		LiteGraph.quickRegisterNodeType("Conversion/Convert From DateTime", "FromDateTime", 1, 1, COLOR_COMPUTER)
 
-		node_const1.connect(0, node_sum, 0 );
-		node_const2.connect(0, node_sum, 1 );
+		LiteGraph.quickRegisterNodeType("External/Demo01", "ExternalDll", 1, 1, COLOR_EXTERNAL)
 
-		var node_acc = LiteGraph.createNode("Computer/Channel/ABC");
-		node_acc.pos = [50,200];
-		this.graph.add(node_acc);
+		LiteGraph.quickRegisterNodeType("Source/Sine Wave", "Sine", 0, 1, COLOR_SOURCE)
 
-		var node_acc = LiteGraph.createNode("Computer/Channel/ABC2");
-		node_acc.pos = [50,250];
-		this.graph.add(node_acc);
-		
-		var node_and = LiteGraph.createNode("logic/AND");
-		node_and.pos = [50,300];
-		this.graph.add(node_and);
-		
+		LiteGraph.quickRegisterNodeType("Viewer/Channel Viewer", "Viewer", 1, 0, COLOR_VIEWER)
+
+		LiteGraph.quickRegisterNodeType("Writer/Data Writer", "DataWriter", 1, 0, COLOR_VIEWER)
+
+		var nodes = ["Computer/Channel/DataMerge", "Conversion/Convert From DateTime",
+			"External/Demo01", "Source/Sine Wave", "Viewer/Channel Viewer", "Writer/Data Writer"]
+
+		for (let i=0; i<nodes.length; ++i) {
+			var node = LiteGraph.createNode(nodes[i]);
+			node.pos = [50, 50 * (i+1)];
+			node.progress = i * 100 / (nodes.length - 1)
+			this.graph.add(node);
+		}
+
 		graphcanvas.resize()
 		this.graph.start()
     }
-
-    graphAddNoe = () => {
-		//node constructor class
-		function MyAddNode()
-		{
-			this.addInput("A","number");
-			this.addInput("B","number");
-			this.addInput("C","number");
-			this.addOutput("A+B","number");
-			this.properties = { precision: 1 };
-		}
-
-		//name to show
-		MyAddNode.title = "Sum";
-
-		//function to call when the node is executed
-		MyAddNode.prototype.onExecute = function()
-		{
-			var A = this.getInputData(0);
-			if( A === undefined )
-				A = 0;
-			var B = this.getInputData(1);
-			if( B === undefined )
-				B = 0;
-			this.setOutputData( 0, A + B );
-		}
-
-		//register in the system
-		LiteGraph.registerNodeType("basic/sumx", MyAddNode );
-
-		function ABC() {
-			this.title = "ABC";
-			this.is_active = true
-			this.progress = 100
-			this.color = LiteGraph.ACCUMULATE_COLOR;
-			this.addInput("input", "number");
-			this.addInput("input", "number");
-			this.addOutput("output", "number");
-		}
-		ABC.title = "ABC"
-		ABC.desc = "ABC"
-		LiteGraph.registerNodeType("Computer/Channel/ABC", ABC);
-
-		function ABC2() {
-			this.title = "ABC1234567890";
-			this.is_active = true
-			this.progress = 100
-			this.color = LiteGraph.ACCUMULATE_COLOR;
-			this.addInput("input", "number");
-			this.addInput("input", "number");
-			this.addOutput("output", "number");
-		}
-		ABC2.title = "ABC1234567890"
-		ABC2.desc = "ABC"
-		LiteGraph.registerNodeType("Computer/Channel/ABC2", ABC2);
-	
-	}
 
     componentDidMount() {
         this.graphInit();
