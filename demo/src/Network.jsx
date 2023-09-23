@@ -23,7 +23,7 @@ export default class NetworkMain extends Component {
 		graphcanvas.render_link_tooltip = false;
 		graphcanvas.connections_width = 1;
 		graphcanvas.render_connection_arrows = true;
-		graphcanvas.render_title = true
+		graphcanvas.render_node_title = false
 		
         // graphcanvas.render_curved_connections = true;
         // graphcanvas.render_connection_arrows = true;

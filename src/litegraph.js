@@ -25,8 +25,8 @@
         NODE_MIN_WIDTH: 50,
         NODE_COLLAPSED_RADIUS: 10,
         NODE_COLLAPSED_WIDTH: 80,
-        NODE_TITLE_COLOR: "#999",
-        NODE_SELECTED_TITLE_COLOR: "#FFF",
+        NODE_TITLE_COLOR: "black",
+        NODE_SELECTED_TITLE_COLOR: "#999",
         NODE_TEXT_SIZE: 14,
         NODE_TEXT_COLOR: "#AAA",
         NODE_SUBTEXT_SIZE: 12,
@@ -442,8 +442,7 @@
             } else {
                 node = new base_class(title);
             }
-            console.log("node", node)
-
+            
             node.type = type;
 
             if (!node.title && title) {
@@ -2451,7 +2450,7 @@
         this.inputs = [];
         this.outputs = [];
         this.connections = [];
-        this.active = true;
+        this.is_active = true;
         this.progress = 0;
 
         //local data
@@ -8736,7 +8735,7 @@ LGraphNode.prototype.executeAction = function(action)
                 }
             }
 
-            //active box
+            // is_active box
             bsize = this.render_active_box;
             ctx.strokeStyle = "gray";
             ctx.fillStyle = "orange";
@@ -8745,16 +8744,23 @@ LGraphNode.prototype.executeAction = function(action)
             ctx.beginPath();
             ctx.rect(pos[0], pos[1], bsize[0], bsize[1]);
             ctx.stroke();
-            if (node.active) ctx.fill();
+            if (node.is_active) ctx.fill();
 
             // progress
-            var w = 100 * (node.size[0] - 30) / 100
+            var w = node.progress * (node.size[0] - 30) / 100
             if (w>0) {
                 ctx.fillStyle = "blue";
                 ctx.beginPath();
                 ctx.rect(pos[0] - 1, pos[1] + bsize[1] + 3, w, 2);
                 ctx.fill();
             }
+
+            // draw text
+            var title = node.getTitle ? node.getTitle() : node.title;
+            ctx.font = this.title_text_font;
+            ctx.textAlign = "left";
+            ctx.fillStyle = node.is_selected ? LiteGraph.NODE_SELECTED_TITLE_COLOR : LiteGraph.NODE_TITLE_COLOR;
+            ctx.fillText(title, pos[0] + bsize[0] + 3, pos[1] + bsize[1] - 1);
 
             ctx.textAlign = "left";
             ctx.globalAlpha = 1;
@@ -10147,8 +10153,10 @@ LGraphNode.prototype.executeAction = function(action)
     LGraphCanvas.prototype.resize = function(width, height) {
         if (!width && !height) {
             var parent = this.canvas.parentNode;
-            width = parent.offsetWidth;
-            height = parent.offsetHeight;
+            if (parent) {
+                width = parent.offsetWidth;
+                height = parent.offsetHeight;
+            }
         }
 
         if (this.canvas.width == width && this.canvas.height == height) {
