@@ -51,7 +51,9 @@ export default class NetworkMain extends Component {
 		node_watch.pos = [300,200];
 		this.graph.add(node_watch);
 		
-		// node_const.connect(0, node_watch, 0 );
+		this.regNode("Computer/Channel/TEST", 2, 1, LiteGraph.NODE_COLOR_COMPUTER)
+		this.regNode("Computer/Channel/WORK", 1, 2, LiteGraph.NODE_COLOR_COMPUTER)
+
 		this.graphAddNoe();
 		var node_sum = LiteGraph.createNode("basic/sumx");
 		node_sum.shape = LiteGraph.ROUND_SHAPE
@@ -77,6 +79,25 @@ export default class NetworkMain extends Component {
 		graphcanvas.resize()
 		this.graph.start()
     }
+
+	regNode = (reg_name, num_input, num_output, color) => {
+		const parts = reg_name.split('/');
+		const title = parts[parts.length - 1];
+
+	    function my_node () {
+			this.title = title
+			this.color = color
+			for (let i = 0; i < num_input; ++i) {
+				this.addInput("in" + (i + 1), "number")
+			}
+			for (let i = 0; i < num_output; ++i) {
+				this.addOutput("out" + (i + 1), "number")
+			}
+		}
+		my_node.title = title
+		
+		LiteGraph.registerNodeType(reg_name, my_node);
+	}
 
     graphAddNoe = () => {
 		//node constructor class

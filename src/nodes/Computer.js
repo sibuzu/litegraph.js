@@ -6,7 +6,7 @@
     function Accumulate() {
         this.is_active = true
         this.progress = 100
-        this.color = LiteGraph.ACCUMULATE_COLOR;
+        this.color = LiteGraph.NODE_COLOR_COMPUTER;
         this.addInput("input", "number");
         this.addOutput("output", "number");
     }
