@@ -4879,6 +4879,16 @@ LGraphNode.prototype.executeAction = function(action)
      * Collapse the node to make it smaller on the canvas
      * @method collapse
      **/
+    LGraphNode.prototype.toggleActive = function() {
+        this.graph._version++;        
+        this.is_active = !this.is_active;
+        this.setDirtyCanvas(true, true);
+    };
+
+    /**
+     * Collapse the node to make it smaller on the canvas
+     * @method collapse
+     **/
     LGraphNode.prototype.collapse = function(force) {
         this.graph._version++;
         if (this.constructor.collapsable === false && !force) {
@@ -5853,7 +5863,7 @@ LGraphNode.prototype.executeAction = function(action)
 	}
 	
     LGraphCanvas.prototype.processMouseDown = function(e) {
-    	
+    	//S1
 		if( this.set_canvas_dirty_on_mouse_event )
 			this.dirty_canvas = true;
 		
@@ -6837,12 +6847,17 @@ LGraphNode.prototype.executeAction = function(action)
             } else if (this.node_dragged) {
                 //node being dragged?
                 var node = this.node_dragged;
+                var bsize = LiteGraph.ACTIVEBOX_SIZE;
+                const bleft = 18;
+                const btop = (node.size[1] - bsize[1]) / 2 - 1;
                 if (
                     node &&
                     e.click_time < 300 &&
-                    isInsideRectangle( e.canvasX, e.canvasY, node.pos[0], node.pos[1] - LiteGraph.NODE_TITLE_HEIGHT, LiteGraph.NODE_TITLE_HEIGHT, LiteGraph.NODE_TITLE_HEIGHT )
+                    isInsideRectangle( e.canvasX, e.canvasY, node.pos[0] + bleft, node.pos[1] + btop, bsize[0], bsize[1] )
                 ) {
-                    node.collapse();
+                    //S2
+                    console.log('active', e.canvasX, e.canvasY, node.pos[0], node.pos[1])
+                    node.toggleActive();
                 }
 
                 this.dirty_canvas = true;
