@@ -7889,6 +7889,7 @@ LGraphNode.prototype.executeAction = function(action)
                 }
 
                 //the connection being dragged by the mouse
+                const connDir2 = connDir == LiteGraph.RIGHT ? LiteGraph.LEFT : LiteGraph.RIGHT;
                 this.renderLink(
                     ctx,
                     this.connecting_pos,
@@ -7898,7 +7899,7 @@ LGraphNode.prototype.executeAction = function(action)
                     false,
                     link_color,
                     connDir,
-                    LiteGraph.LEFT
+                    connDir2
                 );
 
                 ctx.beginPath();

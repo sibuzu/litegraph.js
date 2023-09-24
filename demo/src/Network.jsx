@@ -41,13 +41,13 @@ export default class NetworkMain extends Component {
 		const COLOR_VIEWER = "#FFFF00";
 		const COLOR_WRITER = "#40E0D0";
 
-		LiteGraph.quickRegisterNodeType("Computer/Channel/DataMerge", "Merge", 4, 1, COLOR_COMPUTER)
+		LiteGraph.quickRegisterNodeType("Computer/Channel/DataMerge", "Merge", 2, 1, COLOR_COMPUTER)
 		LiteGraph.quickRegisterNodeType("Computer/Channel/Data Selection", "Selection", 1, 1, COLOR_COMPUTER)
 		LiteGraph.quickRegisterNodeType("Computer/Channel/Dup", "Dup", 1, 1, COLOR_COMPUTER)
 		LiteGraph.quickRegisterNodeType("Computer/Channel/Fill Null Value", "FullNull", 1, 1, COLOR_COMPUTER)
 		LiteGraph.quickRegisterNodeType("Computer/Channel/Input Switch", "ISwitch", 2, 1, COLOR_COMPUTER)
 			
-		LiteGraph.quickRegisterNodeType("Conversion/Convert From DateTime", "FromDateTime", 1, 3, COLOR_COMPUTER)
+		LiteGraph.quickRegisterNodeType("Conversion/Convert From DateTime", "FromDateTime", 1, 1, COLOR_COMPUTER)
 
 		LiteGraph.quickRegisterNodeType("External/Demo01", "ExternalDll", 1, 1, COLOR_EXTERNAL)
 
@@ -62,7 +62,7 @@ export default class NetworkMain extends Component {
 
 		for (let i=0; i<nodes.length; ++i) {
 			var node = LiteGraph.createNode(nodes[i]);
-			node.pos = [100, 100 * (i+1)];
+			node.pos = [50, 50 * (i+1)];
 			node.progress = i * 100 / (nodes.length - 1)
 			this.graph.add(node);
 		}
