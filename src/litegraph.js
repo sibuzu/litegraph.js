@@ -3869,9 +3869,9 @@
                 return true;
             }
         } else if (
-            this.pos[0] - 4 - margin < x &&
-            this.pos[0] + this.size[0] + 4 + margin > x &&
-            this.pos[1] - margin_top - margin < y &&
+            this.pos[0] - margin < x &&
+            this.pos[0] + this.size[0] + margin > x &&
+            this.pos[1] - margin < y &&
             this.pos[1] + this.size[1] + margin > y
         ) {
             return true;
@@ -5888,7 +5888,7 @@ LGraphNode.prototype.executeAction = function(action)
 			return;
 		}
 
-        var node = this.graph.getNodeOnPos( e.canvasX, e.canvasY, this.visible_nodes, 5 );
+        var node = this.graph.getNodeOnPos( e.canvasX, e.canvasY, this.visible_nodes, 1 );
         var skip_dragging = false;
         var skip_action = false;
         var now = LiteGraph.getTime();
