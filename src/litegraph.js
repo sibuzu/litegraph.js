@@ -27,6 +27,7 @@
         NODE_COLLAPSED_WIDTH: 80,
         NODE_TITLE_COLOR: "black",
         NODE_SELECTED_TITLE_COLOR: "#F00",
+        NODE_INACTIVE_TITLE_COLOR: "#888",
         NODE_TEXT_SIZE: 14,
         NODE_TEXT_COLOR: "#AAA",
         NODE_SUBTEXT_SIZE: 12,
@@ -5331,7 +5332,7 @@ LGraphNode.prototype.executeAction = function(action)
         this.render_title_colored = true;
 		this.render_link_tooltip = true;
         this.render_link_color = 'black';
-        this.render_node_title = true;
+        this.render_node_title = false;
         this.render_node_text = false;
 
         this.links_render_mode = LiteGraph.SPLINE_LINK;
@@ -8818,7 +8819,7 @@ LGraphNode.prototype.executeAction = function(action)
             var title = node.getTitle ? node.getTitle() : node.title;
             ctx.font = this.title_text_font;
             ctx.textAlign = "left";
-            ctx.fillStyle = node.is_selected ? LiteGraph.NODE_SELECTED_TITLE_COLOR : LiteGraph.NODE_TITLE_COLOR;
+            ctx.fillStyle = node.is_active ? LiteGraph.NODE_TITLE_COLOR : LiteGraph.NODE_INACTIVE_TITLE_COLOR;
             ctx.fillText(title, pos[0] + bsize[0] + 3, pos[1] + bsize[1] - 1);
 
             ctx.textAlign = "left";
