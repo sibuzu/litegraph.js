@@ -5985,14 +5985,15 @@ LGraphNode.prototype.executeAction = function(action)
                             for ( var i = 0, l = node.outputs.length; i < l; ++i ) {
                                 var output = node.outputs[i];
                                 var link_pos = node.getConnectionPos(false, i);
+                                var slot_size = LiteGraph.NODE_SLOT_SIZE + 1;
                                 if (
                                     isInsideRectangle(
                                         e.canvasX,
                                         e.canvasY,
-                                        link_pos[0] - 15,
-                                        link_pos[1] - 10,
-                                        30,
-                                        20
+                                        link_pos[0] - slot_size,
+                                        link_pos[1] - slot_size,
+                                        slot_size * 2,
+                                        slot_size * 2
                                     )
                                 ) {
                                     this.connecting_node = node;
@@ -6028,14 +6029,15 @@ LGraphNode.prototype.executeAction = function(action)
                             for ( var i = 0, l = node.inputs.length; i < l; ++i ) {
                                 var input = node.inputs[i];
                                 var link_pos = node.getConnectionPos(true, i);
+                                var slot_size = LiteGraph.NODE_SLOT_SIZE + 1;
                                 if (
                                     isInsideRectangle(
                                         e.canvasX,
                                         e.canvasY,
-                                        link_pos[0] - 15,
-                                        link_pos[1] - 10,
-                                        30,
-                                        20
+                                        link_pos[0] - slot_size,
+                                        link_pos[1] - slot_size,
+                                        slot_size * 2,
+                                        slot_size * 2
                                     )
                                 ) {
                                     if (is_double_click) {
