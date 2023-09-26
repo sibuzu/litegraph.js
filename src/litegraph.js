@@ -10518,8 +10518,8 @@ LGraphNode.prototype.executeAction = function(action)
                             node.pos = canvas.convertEventToCanvasOffset(first_event);
                             canvas.graph.add(node);
                         }
-                        if(callback)
-                            callback(node);
+                        // if(callback)
+                        //     callback(node);
                         canvas.graph.afterChange();
                     
                     }
@@ -10533,7 +10533,7 @@ LGraphNode.prototype.executeAction = function(action)
     
         }
     
-        inner_onMenuAdded(node.content + "/", e, prev_menu);
+        inner_onMenuAdded(node.value + "/", e, prev_menu);
         return false;
     
     };
@@ -13048,7 +13048,7 @@ LGraphNode.prototype.executeAction = function(action)
         black: { color: "#222", bgcolor: "#000", groupcolor: "#444" }
     };
 
-    LGraphCanvas.prototype.getCanvasMenuOptions = function() {
+    LGraphCanvas.prototype.getCanvasMenuOptions = function(node) {
         var options = null;
 		var that = this;
         if (this.getMenuOptions) {
@@ -13075,26 +13075,16 @@ LGraphNode.prototype.executeAction = function(action)
 			
             options.push({
                 content: "Delete",
-                disabled: true
+                disabled: !node,
+                callback: LGraphCanvas.onMenuNodeRemove
             });
                 
-            /*if (LiteGraph.showCanvasOptions){
-                options.push({ content: "Options", callback: that.showShowGraphOptionsPanel });
-            }*/
-
             if (Object.keys(this.selected_nodes).length > 1) {
                 options.push({
                     content: "Align",
                     has_submenu: true,
                     callback: LGraphCanvas.onGroupAlign,
                 })
-            }
-
-            if (this._graph_stack && this._graph_stack.length > 0) {
-                options.push(null, {
-                    content: "Close subgraph",
-                    callback: this.closeSubgraph.bind(this)
-                });
             }
         }
 
@@ -13259,7 +13249,7 @@ LGraphNode.prototype.executeAction = function(action)
         };
 
 		if(node)
-			options.title = node.type;
+			options.title = node.title;
 
         //check if mouse is in input
         var slot = null;
@@ -13304,28 +13294,8 @@ LGraphNode.prototype.executeAction = function(action)
                 options.title = "Event";
             }
         } else {
-            if (node) {
-                //on node
-                menu_info = this.getNodeMenuOptions(node);
-            } else {
-                menu_info = this.getCanvasMenuOptions();
-                var group = this.graph.getGroupOnPos(
-                    event.canvasX,
-                    event.canvasY
-                );
-                if (group) {
-                    //on group
-                    menu_info.push(null, {
-                        content: "Edit Group",
-                        has_submenu: true,
-                        submenu: {
-                            title: "Group",
-                            extra: group,
-                            options: this.getGroupMenuOptions(group)
-                        }
-                    });
-                }
-            }
+            //S3
+            menu_info = this.getCanvasMenuOptions(node);
         }
 
         //show menu
@@ -13685,8 +13655,7 @@ LGraphNode.prototype.executeAction = function(action)
             //that.close(e);
         });*/
 
-		LiteGraph.pointerListenerAdd(root,"enter", function(e) {
-		  	//console.log("pointerevents: ContextMenu enter");
+		LiteGraph.pointerListenerAdd(root, "enter", function(e) {
             if (root.closing_timer) {
                 clearTimeout(root.closing_timer);
             }
