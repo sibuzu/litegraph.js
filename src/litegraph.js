@@ -564,6 +564,7 @@
          * @param {String} filter only nodes with ctor.filter equal can be shown
          * @return {Array} array with all the names of the categories
          */
+        //S3
         getNodeTypesCategories: function( filter ) {
             var categories = { "": 1 };
             for (var i in this.registered_node_types) {
@@ -5877,8 +5878,7 @@ LGraphNode.prototype.executeAction = function(action)
 	}
 	
     LGraphCanvas.prototype.processMouseDown = function(e) {
-    	//S1
-		if( this.set_canvas_dirty_on_mouse_event )
+    	if( this.set_canvas_dirty_on_mouse_event )
 			this.dirty_canvas = true;
 		
 		if (!this.graph) {
@@ -6869,7 +6869,6 @@ LGraphNode.prototype.executeAction = function(action)
                     e.click_time < 300 &&
                     isInsideRectangle( e.canvasX, e.canvasY, node.pos[0] + bleft, node.pos[1] + btop, bsize[0], bsize[1] )
                 ) {
-                    //S2
                     console.log('active', e.canvasX, e.canvasY, node.pos[0], node.pos[1])
                     node.toggleActive();
                 }
@@ -10467,6 +10466,8 @@ LGraphNode.prototype.executeAction = function(action)
     }
 
     LGraphCanvas.onMenuAdd = function (node, options, e, prev_menu, callback) {
+        //S2
+        console.log("onMenuAdd:", node, options, e, prev_menu, callback);
 
         var canvas = LGraphCanvas.active_canvas;
         var ref_window = canvas.getCanvasWindow();
@@ -10475,7 +10476,7 @@ LGraphNode.prototype.executeAction = function(action)
             return;
 
         function inner_onMenuAdded(base_category ,prev_menu){
-    
+            console.log("inner_onMenuAdded", base_category ,prev_menu)
             var categories  = LiteGraph.getNodeTypesCategories(canvas.filter || graph.filter).filter(function(category){return category.startsWith(base_category)});
             var entries = [];
     
@@ -10531,7 +10532,7 @@ LGraphNode.prototype.executeAction = function(action)
     
         }
     
-        inner_onMenuAdded('',prev_menu);
+        inner_onMenuAdded(node.content + "/",prev_menu);
         return false;
     
     };
@@ -13052,16 +13053,30 @@ LGraphNode.prototype.executeAction = function(action)
         if (this.getMenuOptions) {
             options = this.getMenuOptions();
         } else {
-            options = [
-                {
-                    content: "Add Node",
-                    has_submenu: true,
-                    callback: LGraphCanvas.onMenuAdd
-                },
-                { content: "Add Group", callback: LGraphCanvas.onGroupAdd },
-				//{ content: "Arrange", callback: that.graph.arrange },
-                //{content:"Collapse All", callback: LGraphCanvas.onMenuCollapseAll }
-            ];
+            //S1
+            var categories  = LiteGraph.getNodeTypesCategories();
+            var options = [];    
+            categories.map(function(category){
+                if (!category)  return;
+                var name = category.split('/')[0]
+                if (!options.some(opt=>opt.content===name)) {
+                    options.push({ 
+                        value: name, 
+                        content: name, 
+                        has_submenu: true,
+                        callback: LGraphCanvas.onMenuAdd
+                    });
+                }
+            });
+            
+            console.log("options:", options);
+            options.push(null);
+			
+            options.push({
+                content: "Delete",
+                disabled: true
+            });
+                
             /*if (LiteGraph.showCanvasOptions){
                 options.push({ content: "Options", callback: that.showShowGraphOptionsPanel });
             }*/
