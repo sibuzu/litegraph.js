@@ -564,7 +564,6 @@
          * @param {String} filter only nodes with ctor.filter equal can be shown
          * @return {Array} array with all the names of the categories
          */
-        //S3
         getNodeTypesCategories: function( filter ) {
             var categories = { "": 1 };
             for (var i in this.registered_node_types) {
@@ -10475,8 +10474,8 @@ LGraphNode.prototype.executeAction = function(action)
         if (!graph)
             return;
 
-        function inner_onMenuAdded(base_category ,prev_menu){
-            console.log("inner_onMenuAdded", base_category ,prev_menu)
+        function inner_onMenuAdded(base_category, event, prev_menu){
+            console.log("inner_onMenuAdded", base_category, event, prev_menu)
             var categories  = LiteGraph.getNodeTypesCategories(canvas.filter || graph.filter).filter(function(category){return category.startsWith(base_category)});
             var entries = [];
     
@@ -10495,9 +10494,11 @@ LGraphNode.prototype.executeAction = function(action)
                         
                 var index = entries.findIndex(function(entry){return entry.value === category_path});
                 if (index === -1) {
-                    entries.push({ value: category_path, content: name, has_submenu: true, callback : function(value, event, mouseEvent, contextMenu){
-                        inner_onMenuAdded(value.value, contextMenu)
-                    }});
+                    entries.push({ value: category_path, content: name, has_submenu: true, 
+                        callback : (value, event, mouseEvent, contextMenu) => {
+                            inner_onMenuAdded(value.value, mouseEvent, contextMenu)
+                        }
+                    });
                 }
                 
             });
@@ -10528,11 +10529,11 @@ LGraphNode.prototype.executeAction = function(action)
     
             });
     
-            new LiteGraph.ContextMenu( entries, { event: e, parentMenu: prev_menu }, ref_window );
+            new LiteGraph.ContextMenu( entries, { event: event, parentMenu: prev_menu }, ref_window );
     
         }
     
-        inner_onMenuAdded(node.content + "/",prev_menu);
+        inner_onMenuAdded(node.content + "/", e, prev_menu);
         return false;
     
     };
@@ -13558,6 +13559,9 @@ LGraphNode.prototype.executeAction = function(action)
         this.options = options;
         var that = this;
 
+        console.log("menu options:", options.left, options.top, options)
+
+        //S5
         //to link a menu with its parent
         if (options.parentMenu) {
             if (options.parentMenu.constructor !== this.constructor) {

@@ -31,6 +31,15 @@
     LiteGraph.quickRegisterNodeType("Computer/Enhanced/Fast Secogram", "", 1, 1, color)
     LiteGraph.quickRegisterNodeType("Computer/Enhanced/Fast ShortTerm Fourier Transform", "FastSTFT", 1, 1, color)
 
+    LiteGraph.quickRegisterNodeType("Computer/External/ExternalDll", "", 1, 1, color)
+    LiteGraph.quickRegisterNodeType("Computer/External/ExternalViewer", "", 1, 1, color)
+
+    LiteGraph.quickRegisterNodeType("Computer/Filter/Comb Filter", "Comb", 1, 1, color)
+    LiteGraph.quickRegisterNodeType("Computer/Filter/FIR Filter", "FIR", 1, 1, color)
+    LiteGraph.quickRegisterNodeType("Computer/Filter/IIR Filter", "FIR", 1, 1, color)
+
+    LiteGraph.quickRegisterNodeType("Computer/HHT/AnCAD EMD", "EMD", 1, 1, color)
+
     color = COLOR_CONVERSION;
     LiteGraph.quickRegisterNodeType("Conversion/Convert From DateTime", "FromDateTime", 1, 1, color)
 
