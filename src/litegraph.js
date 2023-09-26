@@ -1,5 +1,6 @@
 
 (function(global) {
+    //#region LiteGraph
     // *************************************************************
     //   LiteGraph CLASS                                     *******
     // *************************************************************
@@ -790,10 +791,12 @@
             return new Date().getTime();
         };
     }
+    //#endregion
 
-    //*********************************************************************************
-    // LGraph CLASS
-    //*********************************************************************************
+    //#region LGraph
+    // *********************************************************************************
+    //   LGraph CLASS
+    // *********************************************************************************
 
     /**
      * LGraph is the class that contain a full graph. We instantiate one and add nodes to it, and then we can run the execution loop.
@@ -2338,7 +2341,9 @@
     LGraph.prototype.onNodeTrace = function(node, msg, color) {
         //TODO
     };
+    //#endregion
 
+    //#region LLink
     //this is the class in charge of storing link information
     function LLink(id, type, origin_id, origin_slot, target_id, target_slot) {
         this.id = id;
@@ -2382,7 +2387,9 @@
     };
 
     LiteGraph.LLink = LLink;
+    //#endregion
 
+    //#region Node
     // *************************************************************
     //   Node CLASS                                          *******
     // *************************************************************
@@ -2436,7 +2443,7 @@
 		+ onConnectionsChange : a connection changed (new one or removed) (LiteGraph.INPUT or LiteGraph.OUTPUT, slot, true if connected, link_info, input_info )
 		+ onAction: action slot triggered
 		+ getExtraMenuOptions: to add option to context menu
-*/
+    */
 
     /**
      * Base Class for all the node type classes
@@ -4923,7 +4930,9 @@ LGraphNode.prototype.executeAction = function(action)
             (y + this.pos[1]) * graphcanvas.scale + graphcanvas.offset[1]
         ];
     };
+    //#endregion
 
+    //#region LGraphGroup
     function LGraphGroup(title) {
         this._ctor(title);
     }
@@ -5023,7 +5032,9 @@ LGraphNode.prototype.executeAction = function(action)
 
     LGraphGroup.prototype.isPointInside = LGraphNode.prototype.isPointInside;
     LGraphGroup.prototype.setDirtyCanvas = LGraphNode.prototype.setDirtyCanvas;
+    //#endregion
 
+    //#region DragAndScale
     //****************************************
 
     //Scale and Offset
@@ -5244,10 +5255,12 @@ LGraphNode.prototype.executeAction = function(action)
         this.offset[0] = 0;
         this.offset[1] = 0;
     };
+    //#endregion
 
-    //*********************************************************************************
-    // LGraphCanvas: LGraph renderer CLASS
-    //*********************************************************************************
+    //#region LGraphCanvas
+    // *********************************************************************************
+    //   LGraphCanvas: LGraph renderer CLASS
+    // *********************************************************************************
 
     /**
      * This class is in charge of rendering one graph inside a canvas. And provides all the interaction required.
@@ -13376,7 +13389,9 @@ LGraphNode.prototype.executeAction = function(action)
             //	return v.callback.call(that, node, options, e, menu, that, event );
         }
     };
+    //#endregion
 
+    //#region API/utilities
     //API *************************************************
     function compareObjects(a, b) {
         for (var i in a) {
@@ -13506,7 +13521,9 @@ LGraphNode.prototype.executeAction = function(action)
     }
 
     LiteGraph.num2hex = num2hex;
+    //#endregion
 
+    //#region ContextMenu
     /* LiteGraph GUI elements used for canvas editing *************************************/
 
     /**
@@ -13974,7 +13991,9 @@ LGraphNode.prototype.executeAction = function(action)
             }
         }
     };
+    //#endregion
 
+    //#region CurveEditor
 	//used by some widgets to render a curve editor
 	function CurveEditor( points )
 	{
@@ -14152,7 +14171,9 @@ LGraphNode.prototype.executeAction = function(action)
 	}
 
 	LiteGraph.CurveEditor = CurveEditor;
+    //#endregion
 
+    //#region helper
     //used to create nodes from wrapping functions
     LiteGraph.getParameterNames = function(func) {
         return (func + "")
@@ -14271,6 +14292,7 @@ LGraphNode.prototype.executeAction = function(action)
                 window.setTimeout(callback, 1000 / 60);
             };
     }
+    //#endregion
 })(this);
 
 if (typeof exports != "undefined") {
