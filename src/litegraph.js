@@ -5891,8 +5891,12 @@ LGraphNode.prototype.executeAction = function(action)
         LGraphCanvas.active_canvas = this;
         var that = this;
 
-		var x = e.clientX;
-		var y = e.clientY;
+        //S1
+        var canvas = this.canvas;
+        var rect = canvas.getBoundingClientRect();
+        var x = e.clientX - rect.left;
+        var y = e.clientY - rect.top;
+        console.log(this.ds.scale, e.clientX, e.clientY, rect.left, rect.top, x, y);
 		//console.log(y,this.viewport);
 		//console.log("pointerevents: processMouseDown pointerId:"+e.pointerId+" which:"+e.which+" isPrimary:"+e.isPrimary+" :: x y "+x+" "+y);
 
@@ -8365,6 +8369,7 @@ LGraphNode.prototype.executeAction = function(action)
             ctx.save();
             this.ds.toCanvasContext(ctx);
 
+            //S2
             //render BG
             if ( this.ds.scale < 1.5 && !bg_already_painted && this.clear_background_color )
             {
@@ -10466,8 +10471,6 @@ LGraphNode.prototype.executeAction = function(action)
 
     LGraphCanvas.onMenuAdd = function (node, options, e, prev_menu, callback) {
         //S2
-        console.log("onMenuAdd:", node, options, e, prev_menu, callback);
-
         var canvas = LGraphCanvas.active_canvas;
         var ref_window = canvas.getCanvasWindow();
         var graph = canvas.graph;
@@ -10475,7 +10478,6 @@ LGraphNode.prototype.executeAction = function(action)
             return;
 
         function inner_onMenuAdded(base_category, event, prev_menu){
-            console.log("inner_onMenuAdded", base_category, event, prev_menu)
             var categories  = LiteGraph.getNodeTypesCategories(canvas.filter || graph.filter).filter(function(category){return category.startsWith(base_category)});
             var entries = [];
     
@@ -13054,7 +13056,6 @@ LGraphNode.prototype.executeAction = function(action)
         if (this.getMenuOptions) {
             options = this.getMenuOptions();
         } else {
-            //S1
             var categories  = LiteGraph.getNodeTypesCategories();
             var options = [];    
             categories.map(function(category){
@@ -13070,7 +13071,6 @@ LGraphNode.prototype.executeAction = function(action)
                 }
             });
             
-            console.log("options:", options);
             options.push(null);
 			
             options.push({
@@ -13529,8 +13529,6 @@ LGraphNode.prototype.executeAction = function(action)
         this.options = options;
         var that = this;
 
-        console.log("menu options:", options.left, options.top, options)
-
         //S5
         //to link a menu with its parent
         if (options.parentMenu) {
@@ -13642,8 +13640,10 @@ LGraphNode.prototype.executeAction = function(action)
             num++;
         }
 
+        //S3
         //close on leave? touch enabled devices won't work TODO use a global device detector and condition on that
-        /*LiteGraph.pointerListenerAdd(root,"leave", function(e) {
+        /*
+        LiteGraph.pointerListenerAdd(root, "leave", function(e) {
 		  	console.log("pointerevents: ContextMenu leave");
             if (that.lock) {
                 return;
@@ -13653,9 +13653,11 @@ LGraphNode.prototype.executeAction = function(action)
             }
             root.closing_timer = setTimeout(that.close.bind(that, e), 500);
             //that.close(e);
-        });*/
+        });
+        */
 
 		LiteGraph.pointerListenerAdd(root, "enter", function(e) {
+            // console.log("pointerevents: ContextMenu enter");
             if (root.closing_timer) {
                 clearTimeout(root.closing_timer);
             }

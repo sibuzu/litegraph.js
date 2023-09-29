@@ -7,8 +7,7 @@ export default class NetworkMain extends Component {
 		// LiteGraph.debug = true
 		LGraphCanvas.DEFAULT_BACKGROUND_IMAGE = "bg.png"
 		LiteGraph.LINK_COLOR = "black"
-		
-		
+	
 		console.log("NetworkMain is ready2.");
 		this.graph = new LGraph();
 		console.log('graph', this.graph)
@@ -18,7 +17,8 @@ export default class NetworkMain extends Component {
 
 		var graphcanvas = this.graphcanvas = new LGraphCanvas(this.canvas, this.graph);
 		graphcanvas.zoom_modify_alpha = false
-		graphcanvas.autoresize = true
+		graphcanvas.autoresize = false
+		graphcanvas.allow_dragcanvas = false;
 		graphcanvas.render_connections_border = false
 		graphcanvas.render_link_tooltip = false;
 		graphcanvas.connections_width = 1;
@@ -83,8 +83,11 @@ export default class NetworkMain extends Component {
 
 	render() {
 		return (
-			<canvas id='network' className="vsNetworkMain"
-            />
-		)
+			<div className="box1">
+				<div className="box2">
+					<canvas id='network' className="vsNetworkMain"/>
+				</div>
+			</div>
+		);
 	}
 }
