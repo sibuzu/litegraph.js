@@ -10074,7 +10074,7 @@ LGraphNode.prototype.executeAction = function(action)
 							var menu = new LiteGraph.ContextMenu(text_values, {
 									scale: Math.max(1, this.ds.scale),
 									event: event,
-									className: "dark",
+									className: "light",
 									callback: inner_clicked.bind(w)
 								},
 								ref_window);
@@ -12348,7 +12348,7 @@ LGraphNode.prototype.executeAction = function(action)
 					var elem_that = this;
 					var menu = new LiteGraph.ContextMenu(values,{
 							event: event,
-							className: "dark",
+							className: "light",
 							callback: inner_clicked
 						},
 						ref_window);

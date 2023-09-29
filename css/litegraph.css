@@ -22,7 +22,9 @@
     color: #aaf;
     padding: 0;
     box-shadow: 0 0 10px black !important;
-    background-color: #2e2e2e !important;
+    /* background-color: #2e2e2e !important; */
+    background-color: #eee !important;
+    border-radius: 5px;
 	z-index: 10;
 }
 
@@ -42,7 +44,8 @@
 }
 
 .litegraph.litecontextmenu .litemenu-entry.submenu {
-    background-color: #2e2e2e !important;
+    /* background-color: #2e2e2e !important; */
+    background-color: #eee !important;
 }
 
 .litegraph.litecontextmenu.dark .litemenu-entry.submenu {
@@ -88,7 +91,8 @@
 .litegraph .litemenu-entry,
 .litemenu-title {
     font-size: 12px;
-    color: #aaa;
+    /* color: #aaa; */
+    color: #222;
     padding: 0 0 0 4px;
     margin: 2px;
     padding-left: 2px;
@@ -137,16 +141,16 @@
 }
 
 .litegraph .litemenu-title {
-    color: #dde;
-    background-color: #111;
+    color: #00f;
+    background-color: #ddd;
     margin: 0;
     padding: 2px;
     cursor: default;
 }
 
 .litegraph .litemenu-entry:hover:not(.disabled):not(.separator) {
-    background-color: #444 !important;
-    color: #eee;
+    background-color: #eee !important;
+    color: #f00;
     transition: all 0.2s;
 }
 
