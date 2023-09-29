@@ -83,11 +83,7 @@ export default class NetworkMain extends Component {
 
 	render() {
 		return (
-			<div className="box1">
-				<div className="box2">
-					<canvas id='network' className="vsNetworkMain"/>
-				</div>
-			</div>
+			<canvas id='network' className="vsNetworkMain"/>
 		);
 	}
 }
