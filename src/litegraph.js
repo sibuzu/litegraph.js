@@ -209,9 +209,9 @@
             }
 
             //extend class
-            for (var i in global.LGraphNode.prototype) {
+            for (var i in LiteGraph.LGraphNode.prototype) {
                 if (!base_class.prototype[i]) {
-                    base_class.prototype[i] = global.LGraphNode.prototype[i];
+                    base_class.prototype[i] = LiteGraph.LGraphNode.prototype[i];
                 }
             }
 
@@ -430,7 +430,7 @@
          * @param {Function} func
          */
         addNodeMethod: function(name, func) {
-            global.LGraphNode.prototype[name] = func;
+            LiteGraph.LGraphNode.prototype[name] = func;
             for (var i in this.registered_node_types) {
                 var type = this.registered_node_types[i];
                 if (type.prototype[name]) {

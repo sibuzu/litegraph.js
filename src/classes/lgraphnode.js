@@ -67,7 +67,7 @@
         this._ctor(title);
     }
 
-    global.LGraphNode = LiteGraph.LGraphNode = LGraphNode;
+    LiteGraph.LGraphNode = LGraphNode;
 
     LGraphNode.prototype._ctor = function(title) {
         this.title = title || "Unnamed";
@@ -2544,8 +2544,3 @@ LGraphNode.prototype.executeAction = function(action)
     };
     //#endregion
 })(this);
-
-if (typeof exports != "undefined") {
-    exports.LGraphNode = this.LGraphNode;
-}
-

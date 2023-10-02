@@ -48,7 +48,3 @@
     //#endregion
 })(this);
 
-if (typeof exports != "undefined") {
-    exports.LLink = this.LLink;
-}
-
