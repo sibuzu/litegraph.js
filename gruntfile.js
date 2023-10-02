@@ -2,6 +2,8 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     projectFiles: ['src/litegraph.js',
+    'src/classes/lgraph.js',
+    'src/classes/llink.js',
     'src/classes/lgraphnode.js',
     'src/classes/lgraphgroup.js',
     'src/classes/dragandscale.js',

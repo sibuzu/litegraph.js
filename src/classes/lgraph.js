@@ -14,11 +14,13 @@
 		+ onNodeConnectionChange: some connection has changed in the graph (connected or disconnected)
      *
      * @class LGraph
-     * @constructor
-     * @param {Object} o data from previous serialization [optional]
      */
 
     class LGraph {
+        /**
+         * constructor
+         * @param {Object} o data from previous serialization [optional]
+         */
         constructor(o) {
             if (LiteGraph.debug) {
                 console.log("Graph created");
