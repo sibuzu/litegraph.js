@@ -133,11 +133,11 @@
         this.last_mouse[1] = y;
 
 		if(is_inside)
-		{
-	        e.preventDefault();
-		    e.stopPropagation();
-		    return false;
-		}
+        {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
     };
 
     DragAndScale.prototype.toCanvasContext = function(ctx) {
