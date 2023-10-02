@@ -3,6 +3,8 @@ module.exports = function (grunt) {
     pkg: grunt.file.readJSON('package.json'),
     projectFiles: ['src/litegraph.js',
     'src/classes/lgraphnode.js',
+    'src/classes/lgraphgroup.js',
+    'src/classes/dragandscale.js',
     'src/classes/lgraphcanvas.js',
     'src/classes/contextmenu.js',
     'src/classes/curveeditor.js',

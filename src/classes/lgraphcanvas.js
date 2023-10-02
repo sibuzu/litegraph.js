@@ -1,6 +1,5 @@
 (function(global) {
     var LiteGraph = global.LiteGraph;
-    var DragAndScale = LiteGraph.DragAndScale;
 
     //#region LGraphCanvas
     // *********************************************************************************
@@ -28,7 +27,7 @@
             canvas = document.querySelector(canvas);
         }
 
-        this.ds = new DragAndScale();
+        this.ds = new LiteGraph.DragAndScale();
         this.zoom_modify_alpha = true; //otherwise it generates ugly patterns when scaling down too much
 
         this.title_text_font = "" + LiteGraph.NODE_TEXT_SIZE + "px Arial";
