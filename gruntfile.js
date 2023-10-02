@@ -2,8 +2,10 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     projectFiles: ['src/litegraph.js',
-      'src/classes/contextmenu.js',
-      'src/nodes/vsnode.js',
+    'src/classes/contextmenu.js',
+    'src/classes/curveeditor.js',
+    'src/classes/helper.js',
+    'src/nodes/vsnode.js',
       // 'src/nodes/base.js',
       // 'src/nodes/events.js',
       // 'src/nodes/interface.js',
