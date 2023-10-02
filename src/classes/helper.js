@@ -109,7 +109,7 @@
 
     function clamp(v, a, b) {
         return a > v ? a : b < v ? b : v;
-    };
+    }
     global.clamp = clamp;
 
     if (typeof window != "undefined" && !window["requestAnimationFrame"]) {
